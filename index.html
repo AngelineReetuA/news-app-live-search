@@ -17,6 +17,7 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    
     <div id="header" class="text-dark py-1">
       <div class="container">
         <div class="col text-center">
@@ -33,13 +34,21 @@
           </div>
           </div>
         </div>
-          <div id="categories" class="align-middle mb-0">
-            <span id="cats" class="fs-6 text-dark align-middle mt-0">POLITICS</span>
-          </div>
-        <hr>
       </div>
     </div>
-
-    <script src="./readFeed.js"></script>
+    <div id="categories" class="container align-middle mb-0">
+      <span id="cats" class="fs-6 text-dark align-middle mt-0">POLITICS</span>
+    </div>
+  <hr class="container">
+    <script>
+      fetch("http://localhost:3000/get-json").then((response)=>{
+        if(response.ok){
+          return response.json()
+        }
+      })
+      const container = document.getElementById('categories')
+      const cateContainer = container.getElementById('cats')[0]
+      cateContainer.textContent += "hi"
+    </script>
   </body>
 </html>
