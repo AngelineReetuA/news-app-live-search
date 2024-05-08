@@ -18,7 +18,6 @@ async function pullFeed() {
         const title = channel.querySelector("title").textContent;
         const items = channel.querySelectorAll("item");
         for (i=0;i<items.length;i++){
-          console.log(items[i])
           let item = items[i]
           jsonitem.title = item.childNodes[0].textContent;
           jsonitem.description = item.childNodes[1].textContent;
