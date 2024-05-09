@@ -18,10 +18,13 @@
       /* Custom styles for the grid */
       .grid-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust the minimum and maximum width as needed */
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(250px, 1fr)
+        ); /* Adjust the minimum and maximum width as needed */
         gap: 1rem; /* Adjust the gap between cards */
       }
-  
+
       /* Optional: Adjust card styles */
       .card {
         display: flex;
@@ -36,7 +39,11 @@
       crossorigin="anonymous"
     ></script>
     <br />
-    <div id="header" class="text-dark py-1">
+    <div
+      id="header"
+      class="text-dark py-1 sticky-top"
+      style="background-color: white"
+    >
       <div class="container">
         <div class="col-md-8">
           <h1
@@ -58,6 +65,7 @@
           </p>
         </div>
       </div>
+      <hr style="height: 10px" />
     </div>
     <form class="d-flex flex-row align-items-start container navbar my-3">
       <input
@@ -66,54 +74,29 @@
         placeholder="Search"
         aria-label="Search"
         style="width: 700px"
+        id="searchIP"
+        onkeyup="search()"
       />
       <div
         class="btn btn-light btn-outline-secondary px-3 py-2 p-2 bd-highlight"
       >
         <i class="fas fa-search"></i>
       </div>
+      <div id="dropdown" class="dropdown mx-3">
+        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Filter
+        </button>
+        <ul id="drop" class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="overflow-y: scroll; max-height: 400px;">
+          
+        </ul>
+      </div>
     </form>
+    <ul id="searchContainer"></ul>
     <div id="newsContainer" class="container">
       <div class="grid-container">
-        <!-- Cards will be dynamically inserted here -->
       </div>
     </div>
     <hr class="container" />
-    <script>
-      fetch("http://localhost:3000/get-json")
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then((jsonitems) => {
-          const container = document.querySelector(".grid-container");
-
-          jsonitems.forEach((item) => {
-            if (
-              item.title !== "" &&
-              item.description !== "" &&
-              item.link !== "" &&
-              item.pubDate !== ""
-            ) {
-              const card = document.createElement("div");
-              card.classList.add("card", "my-3");
-
-              card.innerHTML = `
-              <div class="card-body">
-                <h5 class="card-title">${item.title}</h5>
-                <p class="card-text">${item.description}</p>
-                <a href="${item.link}" class="link-primary" target="_blank">View article</a>
-              </div>
-              <div class="card-footer">
-                <small style="color: rgb(93, 22, 22);">Published on ${(item.pubDate).slice(5)}</small>
-              </div>
-            `;
-
-              container.appendChild(card);
-            }
-          });
-        });
-    </script>
+    <script type="text/javascript" src="/index.js"></script>
   </body>
 </html>

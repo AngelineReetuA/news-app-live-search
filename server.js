@@ -1,18 +1,24 @@
 import express from "express";
 import fetch from "node-fetch";
-import { parseString } from "xml2js"; // Import parseString function from xml2js
+import { parseString } from "xml2js";
+import { fileURLToPath } from 'url';
 import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname)));
+
 app.get("/", (req, res) => {
-  const currentDir = path.dirname(new URL(import.meta.url).pathname);
-  const filePath = path.resolve(currentDir, "index.html");
-  res.sendFile(filePath);
+  // Assuming index.html is in the root directory
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-
+// CORS setup...
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -49,6 +55,12 @@ app.get("/get-json", async (req, res) => {
     console.log("Error", error);
     res.status(400).send({ message: "Error" });
   }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send({ message: "Internal server error" });
 });
 
 app.listen(port, () => {
