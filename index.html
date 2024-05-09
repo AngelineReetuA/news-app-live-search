@@ -10,6 +10,24 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      /* Custom styles for the grid */
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust the minimum and maximum width as needed */
+        gap: 1rem; /* Adjust the gap between cards */
+      }
+  
+      /* Optional: Adjust card styles */
+      .card {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
   </head>
   <body>
     <script
@@ -41,28 +59,23 @@
         </div>
       </div>
     </div>
-    <form class="container navbar form-inline my-3">
-      <input class="form-control" type="search" placeholder="Search" aria-label="Search" style="width: 75%;">
-      <span class="btn btn-outline-success" type="submit">Search</span>
-    </form>
-    <div class="input-group rounded">
-      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-      <span class="input-group-text border-0" id="search-addon">
+    <form class="d-flex flex-row align-items-start container navbar my-3">
+      <input
+        class="form-control p-2 bd-highlight flex-grow-1"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+        style="width: 700px"
+      />
+      <div
+        class="btn btn-light btn-outline-secondary px-3 py-2 p-2 bd-highlight"
+      >
         <i class="fas fa-search"></i>
-      </span>
-    </div>
+      </div>
+    </form>
     <div id="newsContainer" class="container">
-      <div id="rowWrapper" class="row row-cols-1 row-cols-md-2 g-4">
-        <div id="colWrapper" class="col">
-          <div id="card" class="card my-3" style="display: none;">
-            <div id="cardBody" class="card-body">
-              <h5 id="title" class="card-title"></h5>
-              <p id="desc" class="card-text"></p>
-              <a id="link" target="_blank">View article</a>
-            </div>
-            <small id="pubDate" class="card-footer text-body-secondary"></small>
-          </div>
-        </div>
+      <div class="grid-container">
+        <!-- Cards will be dynamically inserted here -->
       </div>
     </div>
     <hr class="container" />
@@ -74,8 +87,7 @@
           }
         })
         .then((jsonitems) => {
-          const container = document.getElementById("newsContainer");
-          const rowWrap = document.getElementById("rowWrapper");
+          const container = document.querySelector(".grid-container");
 
           jsonitems.forEach((item) => {
             if (
@@ -84,17 +96,21 @@
               item.link !== "" &&
               item.pubDate !== ""
             ) {
-              const card = document.getElementById("card").cloneNode(true);
-              card.querySelector("#title").innerText = item.title;
-              card.querySelector("#desc").innerText = item.description;
-              card.querySelector("#pubDate").innerText = item.pubDate;
-              const link = card.querySelector("#link");
-              link.href = item.link;
-              card.style.display = "block"
-              card.classList.remove("d-none"); 
-              container.appendChild(card); //
-            } else {
-              console.log("One or more fields are missing for this item");
+              const card = document.createElement("div");
+              card.classList.add("card", "my-3");
+
+              card.innerHTML = `
+              <div class="card-body">
+                <h5 class="card-title">${item.title}</h5>
+                <p class="card-text">${item.description}</p>
+                <a href="${item.link}" class="link-primary" target="_blank">View article</a>
+              </div>
+              <div class="card-footer">
+                <small style="color: rgb(93, 22, 22);">Published on ${(item.pubDate).slice(5)}</small>
+              </div>
+            `;
+
+              container.appendChild(card);
             }
           });
         });
