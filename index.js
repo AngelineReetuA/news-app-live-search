@@ -1,4 +1,6 @@
 let cats = [];
+let articles = [];
+let filtered = [];
 
 fetch("http://localhost:3000/get-json")
   .then((response) => {
@@ -7,22 +9,52 @@ fetch("http://localhost:3000/get-json")
     }
   })
   .then(async (jsonitems) => {
-    const container = document.querySelector(".grid-container");
+    const clearFilter = document.getElementById("clear");
 
-    // title, description, link, pubDate, category
+    articles = jsonitems;
     jsonitems.forEach((item) => {
-      if (
-        item.title !== "" &&
-        item.description !== "" &&
-        item.link !== "" &&
-        item.pubDate !== ""
-      ) {
-        const card = document.createElement("div");
-        card.classList.add("card", "my-3");
+      cats.push(item.category);
+    });
+    await showCards(articles);
 
-        cats.push(item.category);
+    cats = new Set(cats);
+    const drop = document.getElementById("drop");
+    for (let cat of cats) {
+      const li = document.createElement("li");
+      li.classList.add("dropdown-item");
+      li.appendChild(document.createTextNode(cat));
+      drop.appendChild(li);
+      li.addEventListener("click", async (event) => {
+        let selectedOption = event.target.outerText;
+        const filtered = articles.filter(
+          (item) => item.category === selectedOption
+        );
+        console.log(filtered);
+        await showCards(filtered);
+        clearFilter.disabled = false;
+        clearFilter.addEventListener("click", async () => {
+          await showCards(articles);
+          clearFilter.disabled = true;
+        });
+      });
+    }
+  });
 
-        card.innerHTML = `
+function showCards(articles) {
+  const container = document.querySelector(".grid-container");
+  container.innerHTML = "";
+  // title, description, link, pubDate, category
+  articles.forEach((item) => {
+    if (
+      item.title !== "" &&
+      item.description !== "" &&
+      item.link !== "" &&
+      item.pubDate !== ""
+    ) {
+      const card = document.createElement("div");
+      card.classList.add("card", "my-3");
+
+      card.innerHTML = `
               <div class="card-body">
                 <h5 class="card-title">${item.title}</h5>
                 <p class="card-text">${item.description}</p>
@@ -35,21 +67,13 @@ fetch("http://localhost:3000/get-json")
               </div>
             `;
 
-        container.appendChild(card);
-      }
-    });
-    cats = new Set(cats);
-    const drop = document.getElementById("drop");
-    console.log(cats);
-    console.log(typeof cats);
-    for (let cat of cats) {
-      console.log(cat);
-      const li = document.createElement("li");
-      li.classList.add("dropdown-item");
-      li.appendChild(document.createTextNode(cat));
-      drop.appendChild(li);
+      container.appendChild(card);
     }
   });
+}
 function search(jsonitems) {
   const input = document.getElementById("searchIP").value;
 }
+
+// select ku oru onchange listener
+// when value change,
