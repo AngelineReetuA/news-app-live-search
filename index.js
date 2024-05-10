@@ -13,8 +13,11 @@ const input = document
       if (searchIP === "") {
         showCards(articles);
       }
-      filtered = articles.filter((item) => item.description.includes(searchIP));
-
+      filtered = filtered.filter((item) => {
+        return (item.title + " " + item.description)
+          .toLowerCase()
+          .includes(searchIP.toLowerCase());
+      });
       showCards(filtered);
     }, 500);
   });
@@ -51,10 +54,9 @@ fetch("http://localhost:3000/get-json")
       drop.appendChild(li);
       li.addEventListener("click", async (event) => {
         let selectedOption = event.target.outerText;
-        const filtered = articles.filter(
+        filtered = articles.filter(
           (item) => item.category === selectedOption
         );
-        console.log(filtered);
         await showCards(filtered);
         clearFilter.disabled = false;
         clearFilter.addEventListener("click", async () => {
