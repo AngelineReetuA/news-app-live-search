@@ -2,6 +2,23 @@ let cats = [];
 let articles = [];
 let filtered = [];
 
+let timeout;
+
+const input = document
+  .getElementById("searchIP")
+  .addEventListener("input", (event) => {
+    clearTimeout(timeout);
+    const searchIP = event.target.value.trim();
+    timeout = setTimeout(() => {
+      if (searchIP === "") {
+        showCards(articles);
+      }
+      filtered = articles.filter((item) => item.description.includes(searchIP));
+
+      showCards(filtered);
+    }, 500);
+  });
+
 fetch("http://localhost:3000/get-json")
   .then((response) => {
     if (response.ok) {
@@ -12,8 +29,16 @@ fetch("http://localhost:3000/get-json")
     const clearFilter = document.getElementById("clear");
 
     articles = jsonitems;
+
     jsonitems.forEach((item) => {
-      cats.push(item.category);
+      if (
+        item.title !== "" &&
+        item.description !== "" &&
+        item.link !== "" &&
+        item.pubDate !== ""
+      ) {
+        cats.push(item.category);
+      }
     });
     await showCards(articles);
 
@@ -71,9 +96,3 @@ function showCards(articles) {
     }
   });
 }
-function search(jsonitems) {
-  const input = document.getElementById("searchIP").value;
-}
-
-// select ku oru onchange listener
-// when value change,
