@@ -4,3 +4,8 @@ This is a simple news articles viewing application which extracts the news from 
 ### Things learnt
 - Reading RSS Feeds
 - Implemented filter and live search
+
+
+https://github.com/AngelineReetuA/news-app-live-search/assets/110884356/fc20651f-0d8d-4853-96a8-a4ff40972b74
+
+
