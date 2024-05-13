@@ -4,5 +4,3 @@ This is a simple news articles viewing application which extracts the news from 
 ### Things learnt
 - Reading RSS Feeds
 - Implemented filter and live search
-
-/home/angeline-reetu/Videos/Screencasts/Screencast from 2024-05-13 15-19-49.webm
