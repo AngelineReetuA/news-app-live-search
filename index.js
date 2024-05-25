@@ -9,17 +9,30 @@ const input = document
   .addEventListener("input", (event) => {
     clearTimeout(timeout);
     const searchIP = event.target.value.trim();
+    console.log(searchIP.length)
     timeout = setTimeout(() => {
-      if (searchIP === "") {
+      if (searchIP.length === 0) {
+        console.log("search empty", articles)
         showCards(articles);
       }
-      filtered = filtered.filter((item) => {
-        return (item.title + " " + item.description)
-          .toLowerCase()
-          .includes(searchIP.toLowerCase());
-      });
+      if (filtered.length != 0 && searchIP.length != 0){
+        console.log("filter applied")
+        filtered = filtered.filter((item) => {
+          return (item.title + " " + item.description)
+            .toLowerCase()
+            .includes(searchIP.toLowerCase());
+        });
+      } else {
+        console.log("filter not applied")
+        filtered = articles.filter((item) => {
+          return (item.title + " " + item.description)
+            .toLowerCase()
+            .includes(searchIP.toLowerCase());
+        });
+      }
+     
       showCards(filtered);
-    }, 500);
+    }, 750);
   });
 
 fetch("http://localhost:3000/get-json")
